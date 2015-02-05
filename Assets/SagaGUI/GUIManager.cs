@@ -1,17 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public static class GUIManager
+namespace SagaGUI
 {
-	public static List<GUISet> InitializedSets;
-
-	public static void ShowAllSets ()
+	public static class GUIManager
 	{
-		foreach (var set in InitializedSets) set.Visible = true;
-	}
+		public static List<GUISet> InitializedSets;
 
-	public static void HideAllSets ()
-	{
-		foreach (var set in InitializedSets) set.Visible = false;
+		public static void ShowAllSets ()
+		{
+			foreach (var set in InitializedSets) set.Visible = true;
+		}
+
+		public static void HideAllSets ()
+		{
+			foreach (var set in InitializedSets) set.Visible = false;
+		}
 	}
 }

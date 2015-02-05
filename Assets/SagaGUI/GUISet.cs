@@ -1,49 +1,52 @@
 ﻿using UnityEngine;
 
-public abstract class GUISet : MonoBehaviour
+namespace SagaGUI
 {
-	private bool _visible;
-	public bool Visible
+	public abstract class GUISet : MonoBehaviour
 	{
-		get { return _visible; }
-		set 
+		private bool _visible;
+		public bool Visible
 		{
-			if (_visible == value) return;
+			get { return _visible; }
+			set
+			{
+				if (_visible == value) return;
 
-			if (value) Show();
-			else Hide();
+				if (value) Show();
+				else Hide();
 
-			_visible = value; 
+				_visible = value;
+			}
 		}
-	}
 
-	public virtual void Initialize ()
-	{
+		public virtual void Initialize ()
+		{
 
-	}
+		}
 
-	protected virtual void Awake () 
-	{
-    	
-	}
+		protected virtual void Awake ()
+		{
 
-	protected virtual void Start () 
-	{
-    	
-	}
+		}
 
-	protected virtual void Update () 
-	{
-    	
-	}
+		protected virtual void Start ()
+		{
 
-	protected virtual void Show ()
-	{
+		}
 
-	}
+		protected virtual void Update ()
+		{
 
-	protected virtual void Hide ()
-	{
+		}
 
+		protected virtual void Show ()
+		{
+
+		}
+
+		protected virtual void Hide ()
+		{
+
+		}
 	}
 }
