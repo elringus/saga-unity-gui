@@ -4,7 +4,6 @@ namespace SagaGUI
 {
 	public abstract class GUISet : MonoBehaviour
 	{
-		private bool _visible;
 		public bool Visible
 		{
 			get { return _visible; }
@@ -19,14 +18,11 @@ namespace SagaGUI
 			}
 		}
 
-		public virtual void Initialize ()
-		{
-
-		}
+		private bool _visible;
 
 		protected virtual void Awake ()
 		{
-
+			
 		}
 
 		protected virtual void Start ()
@@ -36,16 +32,18 @@ namespace SagaGUI
 
 		protected virtual void Update ()
 		{
+			
+		}
+
+		public virtual void Show ()
+		{
+			if (Visible) return;
 
 		}
 
-		protected virtual void Show ()
+		public virtual void Hide ()
 		{
-
-		}
-
-		protected virtual void Hide ()
-		{
+			if (!Visible) return;
 
 		}
 	}
