@@ -14,10 +14,7 @@ namespace SagaGUI
 			get
 			{
 				if (_instance == null)
-				{
-					_instance = MonoBehaviour.FindObjectOfType<GUIManager>();
-					if (_instance == null) _instance = Initialize();
-				}
+					_instance = Initialize();
 				return _instance;
 			}
 		}
@@ -40,6 +37,7 @@ namespace SagaGUI
 		}
 		#endregion
 
+		[HideInInspector]
 		public List<GUISet> InitializedSets = new List<GUISet>();
 
 		#region MONOBEHAVIOUR_CALLBACKS

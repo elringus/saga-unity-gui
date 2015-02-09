@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 namespace SagaGUI
 {
@@ -7,23 +8,16 @@ namespace SagaGUI
 		public bool Visible
 		{
 			get { return _visible; }
-			set
-			{
-				if (_visible == value) return;
-
-				if (value) Show();
-				else Hide();
-
-				_visible = value;
-			}
+			set { if (value) Show(); else Hide(); }
 		}
 
-		private bool _visible;
+		private bool _visible = true;
+		private CanvasGroup canvasGroup;
 
 		#region MONOBEHAVIOUR_CALLBACKS
 		protected virtual void Awake ()
 		{
-
+			canvasGroup = GetComponent<CanvasGroup>();
 		}
 
 		protected virtual void Start ()
@@ -56,12 +50,20 @@ namespace SagaGUI
 		{
 			if (Visible) return;
 
+			canvasGroup.alpha = 1;
+			canvasGroup.interactable = true;
+
+			_visible = true;
 		}
 
 		public virtual void Hide ()
 		{
 			if (!Visible) return;
 
+			canvasGroup.alpha = 0;
+			canvasGroup.interactable = false;
+
+			_visible = false;
 		}
 	}
 
@@ -73,11 +75,8 @@ namespace SagaGUI
 		{
 			get
 			{
-				if (_instance == null)
-				{
-					_instance = FindObjectOfType<T>();
-					if (_instance == null) _instance = Initialize();
-				}
+				if (_instance == null) 
+					_instance = Initialize();
 				return _instance;
 			}
 		}
@@ -86,7 +85,7 @@ namespace SagaGUI
 
 		public static T Initialize ()
 		{
-			var duplicate = GUIManager.I.InitializedSets.Find(s => s.name == typeof(T).Name);
+			var duplicate = FindObjectOfType<T>();
 			if (duplicate != null)
 			{
 				GUIManager.I.InitializedSets.Remove(duplicate);
