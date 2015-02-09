@@ -7,51 +7,71 @@ namespace SagaGUI
 {
 	public class GUIManager : MonoBehaviour
 	{
-		#region SINGLETON
+		#region SINGLETON_MANAGEMENT
 		private static GUIManager _instance;
-		private static GUIManager i
+		public static GUIManager I
 		{
 			get
 			{
 				if (_instance == null)
 				{
-					_instance = FindObjectOfType<GUIManager>();
-					if (_instance == null) Initialize();
+					_instance = MonoBehaviour.FindObjectOfType<GUIManager>();
+					if (_instance == null) _instance = Initialize();
 				}
 				return _instance;
 			}
 		}
-		private void OnApplicationQuit () { _instance = null; }
-		#endregion
 
-		public static bool Initialized { get { return i.initialized; } }
-		public static List<GUISet> InitializedSets { get { return i.initializedSets; } }
+		public static bool Initialized { get { return _instance != null; } }
 
-		private bool initialized;
-		private List<GUISet> initializedSets = new List<GUISet>();
-
-		public static void Initialize ()
+		public static GUIManager Initialize ()
 		{
-			if (FindObjectOfType<Canvas>()) 
-				foreach (var canvas in FindObjectsOfType<Canvas>()) 
+			if (FindObjectOfType<Canvas>())
+				foreach (var canvas in FindObjectsOfType<Canvas>())
 					Destroy(canvas.gameObject);
-
-			GameObject.Instantiate(Resources.Load<GameObject>("GUIEssentials/GUI")).name = "GUI";
 
 			if (!FindObjectOfType<EventSystem>())
 				GameObject.Instantiate(Resources.Load<GameObject>("GUIEssentials/EventSystem")).name = "EventSystem";
 
-			i.initialized = true;
+			var guiManager = (Instantiate(Resources.Load<GameObject>("GUIEssentials/GUI")) as GameObject).GetComponent<GUIManager>();
+			guiManager.gameObject.name = "GUI";
+
+			return guiManager;
+		}
+		#endregion
+
+		public List<GUISet> InitializedSets = new List<GUISet>();
+
+		#region MONOBEHAVIOUR_CALLBACKS
+		private void Awake ()
+		{
+
 		}
 
-		public static void ShowAllSets ()
+		private void Start ()
 		{
-			foreach (var set in InitializedSets) set.Visible = true;
+
 		}
 
-		public static void HideAllSets ()
+		private void Update ()
 		{
-			foreach (var set in InitializedSets) set.Visible = false;
+
+		}
+
+		private void OnApplicationQuit () 
+		{ 
+			_instance = null; 
+		}
+		#endregion
+
+		public void ShowAllSets ()
+		{
+			foreach (var set in InitializedSets) set.Show();
+		}
+
+		public void HideAllSets ()
+		{
+			foreach (var set in InitializedSets) set.Hide();
 		}
 	}
 }

@@ -2,7 +2,7 @@
 
 namespace SagaGUI
 {
-	public class PlayerStatus : GUISet
+	public class PlayerStatus : GUISet<PlayerStatus>
 	{
 
 	}
