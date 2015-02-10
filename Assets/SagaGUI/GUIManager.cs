@@ -5,10 +5,18 @@ using System.Collections.Generic;
 
 namespace SagaGUI
 {
+	/// <summary>
+	/// Manages all the GUI objects on the scene.
+	/// Use GUIManager.I to get the instance and use it.
+	/// </summary>
 	public class GUIManager : MonoBehaviour
 	{
 		#region SINGLETON_MANAGEMENT
 		private static GUIManager _instance;
+		/// <summary>
+		/// Active instance of the GUIManager. 
+		/// Will automatically Initialize() if there is none.
+		/// </summary>
 		public static GUIManager I
 		{
 			get
@@ -19,8 +27,16 @@ namespace SagaGUI
 			}
 		}
 
+		/// <summary>
+		/// Is GUI instantiated on the scene and ready to use?
+		/// </summary>
 		public static bool Initialized { get { return _instance != null; } }
 
+		/// <summary>
+		/// Forces re-initialization of the GUIManager. 
+		/// All the present GUI hierarchy (if any) will be destroyed.
+		/// </summary>
+		/// <returns>Instance of the instantiated GUIManager.</returns>
 		public static GUIManager Initialize ()
 		{
 			if (FindObjectOfType<Canvas>())
@@ -37,6 +53,10 @@ namespace SagaGUI
 		}
 		#endregion
 
+		/// <summary>
+		/// All the GUI sets, currently present on the scene.
+		/// Do not modify this list directly!
+		/// </summary>
 		[HideInInspector]
 		public List<GUISet> InitializedSets = new List<GUISet>();
 
@@ -62,11 +82,17 @@ namespace SagaGUI
 		}
 		#endregion
 
+		/// <summary>
+		/// Calls Show() on every set currently present in the scene.
+		/// </summary>
 		public void ShowAllSets ()
 		{
 			foreach (var set in InitializedSets) set.Show();
 		}
 
+		/// <summary>
+		/// Calls Hide() on every set currently present in the scene.
+		/// </summary>
 		public void HideAllSets ()
 		{
 			foreach (var set in InitializedSets) set.Hide();

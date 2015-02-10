@@ -3,8 +3,15 @@ using UnityEngine.UI;
 
 namespace SagaGUI
 {
+	/// <summary>
+	/// Base class for all the sets.
+	/// Provides generic functionality.
+	/// </summary>
 	public abstract class GUISet : MonoBehaviour
 	{
+		/// <summary>
+		/// Is this set visible (alpha = 1)?
+		/// </summary>
 		public bool Visible
 		{
 			get { return _visible; }
@@ -46,6 +53,10 @@ namespace SagaGUI
 		}
 		#endregion
 
+		/// <summary>
+		/// Sets alpha of the set canvas group to 1, revealing all the objects in the set.
+		/// Also enables interaction with the elements in the set.
+		/// </summary>
 		public virtual void Show ()
 		{
 			if (Visible) return;
@@ -56,6 +67,10 @@ namespace SagaGUI
 			_visible = true;
 		}
 
+		/// <summary>
+		/// Sets alpha of the set canvas group to 0, hiding all the objects in the set.
+		/// Also disables interaction with the elements in the set.
+		/// </summary>
 		public virtual void Hide ()
 		{
 			if (!Visible) return;
@@ -67,10 +82,19 @@ namespace SagaGUI
 		}
 	}
 
+	/// <summary>
+	/// Forces singleton pattern for all the inherited classes.
+	/// Also implements generic instance management.
+	/// </summary>
+	/// <typeparam name="T">Type of the GUI set. Type name should be identical to the name of the set prefab.</typeparam>
 	public abstract class GUISet<T> : GUISet where T : GUISet
 	{
 		#region SINGLETON_MANAGEMENT
 		private static T _instance;
+		/// <summary>
+		/// Active instance of the GUI set. 
+		/// Will automatically Initialize() if there is none.
+		/// </summary>
 		public static T I
 		{
 			get
@@ -81,8 +105,16 @@ namespace SagaGUI
 			}
 		}
 
+		/// <summary>
+		/// Is GUI set instantiated on the scene and ready to use?
+		/// </summary>
 		public static bool Initialized { get { return _instance != null; } }
 
+		/// <summary>
+		/// Forces re-initialization of the GUI set. 
+		/// Already present instance of the set (if there is one) will be destroyed.
+		/// </summary>
+		/// <returns>Instance of the instantiated GUI set.</returns>
 		public static T Initialize ()
 		{
 			var duplicate = FindObjectOfType<T>();
