@@ -9,6 +9,14 @@ namespace SagaGUI
 	/// </summary>
 	public class Inventory : GUISet<Inventory>
 	{
+		private InventoryWindow inventoryWindow;
+
+		protected override void Awake ()
+		{
+			base.Awake();
+
+			inventoryWindow = transform.Find("panel_inventory-window").GetComponent<InventoryWindow>();
+		}
 
 		/// <summary>
 		/// Adds item to the character inventory.
@@ -18,7 +26,23 @@ namespace SagaGUI
 		/// <param name="slot">Slot ID. Using default will place in the first free slot of a bag.</param>
 		public void AddItem (Item item, int bag = -1, int slot = -1)
 		{
-			
+			var newItem = InventoryItem.Initialize(item);
+
+			var freeBag = bag == -1 ? inventoryWindow.FindFreeBag() : bag;
+			if (freeBag == -1)
+			{
+				Debug.LogError("Can't add an item — no free bags available.");
+				return;
+			}
+
+			var freeSlot = slot == -1 ? inventoryWindow.FindFreeSlot(freeBag) : inventoryWindow.Bags[freeBag][slot];
+			if (freeSlot == null || freeSlot.Item != null)
+			{
+				Debug.LogError("Can't add an item to the bag — no free slots available.");
+				return;
+			}
+
+			freeSlot.Item = newItem;
 		}
 
 		/// <summary>
