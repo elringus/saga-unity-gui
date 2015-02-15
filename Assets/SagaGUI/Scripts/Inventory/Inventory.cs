@@ -26,8 +26,6 @@ namespace SagaGUI
 		/// <param name="slot">Slot ID. Using default will place in the first free slot of a bag.</param>
 		public void AddItem (Item item, int bag = -1, int slot = -1)
 		{
-			var newItem = InventoryItem.Initialize(item);
-
 			var freeBag = bag == -1 ? inventoryWindow.FindFreeBag() : bag;
 			if (freeBag == -1)
 			{
@@ -36,13 +34,13 @@ namespace SagaGUI
 			}
 
 			var freeSlot = slot == -1 ? inventoryWindow.FindFreeSlot(freeBag) : inventoryWindow.Bags[freeBag][slot];
-			if (freeSlot == null || freeSlot.Item != null)
+			if (freeSlot == null || freeSlot.InventoryItem != null)
 			{
 				Debug.LogError("Can't add an item to the bag — no free slots available.");
 				return;
 			}
 
-			freeSlot.Item = newItem;
+			freeSlot.InventoryItem = InventoryItem.Initialize(item);
 		}
 
 		/// <summary>
@@ -51,7 +49,14 @@ namespace SagaGUI
 		/// <param name="item">The item to remove.</param>
 		public void RemoveItem (Item item)
 		{
+			var itemToRemove = inventoryWindow.FindItem(item);
+			if (itemToRemove == null)
+			{
+				Debug.LogError("Can't remove item form inventory — can't find this item in bags.");
+				return;
+			}
 
+			inventoryWindow.RemoveItem(itemToRemove);
 		}
 
 		/// <summary>
@@ -61,7 +66,14 @@ namespace SagaGUI
 		/// <param name="slot">ID of a slot, where item placed.</param>
 		public void RemoveItem (int bag, int slot)
 		{
+			var itemToRemove = inventoryWindow.FindItem(bag, slot);
+			if (itemToRemove == null)
+			{
+				Debug.LogError("Can't remove item form inventory — can't find this item in bags.");
+				return;
+			}
 
+			inventoryWindow.RemoveItem(itemToRemove);
 		}
 
 		public void HandleUseItem (UnityAction<int, int> action)

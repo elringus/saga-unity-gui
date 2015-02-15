@@ -4,16 +4,16 @@ namespace SagaGUI
 {
 	public class InventorySlot : MonoBehaviour
 	{
-		public InventoryItem Item
+		public InventoryItem InventoryItem
 		{
-			get { return _item; }
+			get { return _inventoryItem; }
 			set
 			{
-				value.transform.SetParent(transform, false);
-				_item = value;
+				if (value != null) value.transform.SetParent(transform, false);
+				_inventoryItem = value;
 			}
 		}
 
-		private InventoryItem _item;
+		private InventoryItem _inventoryItem;
 	}
 }

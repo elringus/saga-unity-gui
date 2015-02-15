@@ -5,9 +5,12 @@ public class GUITesting : MonoBehaviour
 {
 	private void Awake () 
 	{
-		//Inventory.Initialize();
-		for (int i = 0; i < 115; i++)
-			Inventory.I.AddItem(new Item());
+		for (int i = 0; i < 30; i++)
+			Inventory.I.AddItem(new Item() { ID = i });
+		Inventory.I.AddItem(new Item() { ID = 101 }, 4, 15);
+
+		Inventory.I.RemoveItem(new Item() { ID = 10 });
+		Inventory.I.RemoveItem(0, 1);
 	}
 
 	private void Update () 

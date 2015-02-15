@@ -21,20 +21,23 @@ namespace SagaGUI
 				Bags.Add(i, slots);
 			}
 
-			//foreach (var bag in Bags)
-			//	foreach (var slot in bag.Value)
-			//		print("Bag " + bag.Key + ": Slot " + slot);
-
 			inventory = FindObjectOfType<Inventory>();
 			closeButton = transform.Find("button_close").GetComponent<Button>();
 
 			closeButton.OnClick(inventory.Hide);
 		}
 
+		private void Start ()
+		{
+			//foreach (var bag in Bags)
+			//	foreach (var slot in bag.Value)
+			//		print("Bag " + bag.Key + ": Item " + (slot.InventoryItem != null ? slot.InventoryItem.Item.ID.ToString() : "empty"));
+		}
+
 		public int FindFreeBag ()
 		{
 			foreach (var bag in Bags)
-				if (bag.Value.Exists(s => s.Item == null)) return bag.Key;
+				if (bag.Value.Exists(s => s.InventoryItem == null)) return bag.Key;
 
 			// can't find free bag, return -1
 			return -1;
@@ -43,10 +46,42 @@ namespace SagaGUI
 		public InventorySlot FindFreeSlot (int bag)
 		{
 			foreach (var slot in Bags[bag])
-				if (slot.Item == null) return slot;
+				if (slot.InventoryItem == null) return slot;
 
 			// can't find free slot in the bag, return null
 			return null;
+		}
+
+		public InventoryItem FindItem (Item item)
+		{
+			InventoryItem foundItem = null;
+
+			foreach (var bag in Bags)
+			{
+				foundItem = bag.Value.Find(s => s.InventoryItem.Item.ID == item.ID).InventoryItem;
+				if (foundItem != null) break;
+			}
+
+			return foundItem;
+		}
+
+		public InventoryItem FindItem (int bag, int slot)
+		{
+			return Bags[bag][slot].InventoryItem;
+		}
+
+		public void RemoveItem (InventoryItem inventoryItem)
+		{
+			foreach (var bag in Bags)
+			{
+				var slot = bag.Value.Find(s => s.InventoryItem == inventoryItem);
+				if (slot != null)
+				{
+					slot.InventoryItem = null;
+					Destroy(inventoryItem.gameObject);
+					break;
+				}
+			}
 		}
 	}
 }
