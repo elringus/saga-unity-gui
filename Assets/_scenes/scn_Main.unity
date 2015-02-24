@@ -326,25 +326,13 @@ Prefab:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22358094, guid: 7982c5f725a4c2647b6d8f84b958be83, type: 2}
-      propertyPath: m_PixelPerfect
+      propertyPath: m_RenderMode
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 11458092, guid: 7982c5f725a4c2647b6d8f84b958be83, type: 2}
-      propertyPath: m_MatchWidthOrHeight
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 11458092, guid: 7982c5f725a4c2647b6d8f84b958be83, type: 2}
-      propertyPath: m_UiScaleMode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 11458092, guid: 7982c5f725a4c2647b6d8f84b958be83, type: 2}
-      propertyPath: m_ScreenMatchMode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 11458092, guid: 7982c5f725a4c2647b6d8f84b958be83, type: 2}
-      propertyPath: m_ScaleFactor
-      value: 1
-      objectReference: {fileID: 0}
+    - target: {fileID: 22358094, guid: 7982c5f725a4c2647b6d8f84b958be83, type: 2}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 340283429}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7982c5f725a4c2647b6d8f84b958be83, type: 2}
   m_RootGameObject: {fileID: 1774683303}
@@ -477,7 +465,7 @@ MonoBehaviour:
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1920, y: 1080}
-  m_ScreenMatchMode: 1
+  m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
@@ -492,8 +480,8 @@ Canvas:
   m_GameObject: {fileID: 1774683303}
   m_Enabled: 1
   serializedVersion: 2
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 1
+  m_Camera: {fileID: 340283429}
   m_PlaneDistance: 100
   m_PixelPerfect: 1
   m_ReceivesEvents: 1

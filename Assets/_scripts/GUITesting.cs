@@ -12,9 +12,4 @@ public class GUITesting : MonoBehaviour
 		Inventory.I.RemoveItem(new Item() { ID = 10 });
 		Inventory.I.RemoveItem(0, 1);
 	}
-
-	private void Update () 
-	{
-		
-	}
 }

@@ -81,12 +81,22 @@ namespace SagaGUI
 
 		}
 
+		public void HandleUseItem (UnityAction<Item> action)
+		{
+
+		}
+
 		public void HandleMoveItem (UnityAction<int, int, int, int> action)
 		{
 
 		}
 
 		public void HandleDropItem (UnityAction<int, int> action)
+		{
+
+		}
+
+		public void HandleDropItem (UnityAction<Item> action)
 		{
 
 		}

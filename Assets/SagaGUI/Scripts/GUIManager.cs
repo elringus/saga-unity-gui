@@ -9,6 +9,7 @@ namespace SagaGUI
 	/// Manages all the GUI objects on the scene.
 	/// Use GUIManager.I to get the instance and use it.
 	/// </summary>
+	[RequireComponent(typeof(Canvas))]
 	public class GUIManager : MonoBehaviour
 	{
 		#region SINGLETON_MANAGEMENT
@@ -60,10 +61,13 @@ namespace SagaGUI
 		[HideInInspector]
 		public List<GUISet> InitializedSets = new List<GUISet>();
 
+		private Canvas canvas;
+
 		#region MONOBEHAVIOUR_CALLBACKS
 		private void Awake ()
 		{
-
+			canvas = GetComponent<Canvas>();
+			canvas.worldCamera = Camera.main;
 		}
 
 		private void Start ()
