@@ -15,7 +15,7 @@ public class DragArea : MonoBehaviour, IBeginDragHandler, IDragHandler
 		transform.SetAsFirstSibling();
 	}
 
-	private void Awake ()
+	private void Start ()
 	{
 		canvasCamera = FindObjectOfType<Canvas>().worldCamera;
 	}

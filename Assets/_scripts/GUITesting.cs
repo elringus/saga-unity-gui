@@ -11,5 +11,9 @@ public class GUITesting : MonoBehaviour
 
 		Inventory.I.RemoveItem(new Item() { ID = 10 });
 		Inventory.I.RemoveItem(0, 1);
+
+		Inventory.I.OnUseItem += (Item i) => print("Used " + i.ID);
+		Inventory.I.OnDropItem += (Item i) => print("Droped " + i.ID);
+		Inventory.I.OnMoveItem += (Item i, int b, int s) => print(string.Format("Item {0} moved to bag {1} slot {2}", i.ID, b, s));
 	}
 }

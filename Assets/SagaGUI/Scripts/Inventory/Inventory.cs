@@ -9,6 +9,24 @@ namespace SagaGUI
 	/// </summary>
 	public class Inventory : GUISet<Inventory>
 	{
+		/// <summary>
+		/// Player used an item.
+		/// T1 = item to use.
+		/// </summary>
+		public event UnityAction<Item> OnUseItem = delegate { };
+		/// <summary>
+		/// Player dragged item out of the bag to drop it.
+		/// T1 = item to drop.
+		/// </summary>
+		public event UnityAction<Item> OnDropItem = delegate { };
+		/// <summary>
+		/// Player dragged item to another slot.
+		/// T1 = item moved, 
+		/// T2 = target bag id, 
+		/// T3 = target slot id.
+		/// </summary>
+		public event UnityAction<Item, int, int> OnMoveItem = delegate { };
+
 		private InventoryWindow inventoryWindow;
 
 		protected override void Awake ()
@@ -29,14 +47,14 @@ namespace SagaGUI
 			var freeBag = bag == -1 ? inventoryWindow.FindFreeBag() : bag;
 			if (freeBag == -1)
 			{
-				Debug.LogError("Can't add an item — no free bags available.");
+				Debug.LogError("SagaGUI: Can't add an item — no free bags available.");
 				return;
 			}
 
 			var freeSlot = slot == -1 ? inventoryWindow.FindFreeSlot(freeBag) : inventoryWindow.Bags[freeBag][slot];
 			if (freeSlot == null || freeSlot.InventoryItem != null)
 			{
-				Debug.LogError("Can't add an item to the bag — no free slots available.");
+				Debug.LogError("SagaGUI: Can't add an item to the bag — no free slots available.");
 				return;
 			}
 
@@ -52,7 +70,7 @@ namespace SagaGUI
 			var itemToRemove = inventoryWindow.FindItem(item);
 			if (itemToRemove == null)
 			{
-				Debug.LogError("Can't remove item form inventory — can't find this item in bags.");
+				Debug.LogError("SagaGUI: Can't remove item form inventory — can't find this item in bags.");
 				return;
 			}
 
@@ -69,36 +87,15 @@ namespace SagaGUI
 			var itemToRemove = inventoryWindow.FindItem(bag, slot);
 			if (itemToRemove == null)
 			{
-				Debug.LogError("Can't remove item form inventory — can't find this item in bags.");
+				Debug.LogError("SagaGUI: Can't remove item form inventory — can't find this item in bags.");
 				return;
 			}
 
 			inventoryWindow.RemoveItem(itemToRemove);
 		}
 
-		public void HandleUseItem (UnityAction<int, int> action)
-		{
-
-		}
-
-		public void HandleUseItem (UnityAction<Item> action)
-		{
-
-		}
-
-		public void HandleMoveItem (UnityAction<int, int, int, int> action)
-		{
-
-		}
-
-		public void HandleDropItem (UnityAction<int, int> action)
-		{
-
-		}
-
-		public void HandleDropItem (UnityAction<Item> action)
-		{
-
-		}
+		internal void FireUseItem (Item item) { OnUseItem(item); }
+		internal void FireDropItem (Item item) { OnDropItem(item); }
+		internal void FireMoveItem (Item item, int bag, int slot) { OnMoveItem(item, bag, slot); }
 	}
 }
