@@ -58,8 +58,10 @@ namespace SagaGUI
 
 			foreach (var bag in Bags)
 			{
-				foundItem = bag.Value.Find(s => s.InventoryItem.Item.ID == item.ID).InventoryItem;
-				if (foundItem != null) break;
+				var slot = bag.Value.Find(s => s.InventoryItem && s.InventoryItem.Item.ID == item.ID);
+				if (!slot) continue;
+				foundItem = slot.InventoryItem;
+				break;
 			}
 
 			return foundItem;
