@@ -22,10 +22,9 @@ namespace SagaGUI
 		/// <summary>
 		/// Player dragged item to another slot.
 		/// T1 = item moved, 
-		/// T2 = target bag id, 
-		/// T3 = target slot id.
+		/// T2 = target location.
 		/// </summary>
-		public event UnityAction<Item, int, int> OnMoveItem = delegate { };
+		public event UnityAction<Item, InventoryLocation> OnMoveItem = delegate { };
 
 		private InventoryWindow inventoryWindow;
 
@@ -37,24 +36,34 @@ namespace SagaGUI
 		}
 
 		/// <summary>
-		/// Adds item to the character inventory.
+		/// Adds item to the character inventory at the first avaliable empty slot.
 		/// </summary>
 		/// <param name="item">The item to add.</param>
-		/// <param name="bag">Bag ID. Using deafult will place the item in the first free bag.</param>
-		/// <param name="slot">Slot ID. Using default will place in the first free slot of a bag.</param>
-		public void AddItem (Item item, int bag = -1, int slot = -1)
+		public void AddItem (Item item)
 		{
-			var freeBag = bag == -1 ? inventoryWindow.FindFreeBag() : bag;
-			if (freeBag == -1)
+			var freeSlot = inventoryWindow.GetEmptySlot();
+
+			if (!freeSlot || freeSlot.InventoryItem != null)
 			{
-				Debug.LogError("SagaGUI: Can't add an item — no free bags available.");
+				Debug.LogError("SagaGUI: Can't add an item to the bag — no free slots available.");
 				return;
 			}
 
-			var freeSlot = slot == -1 ? inventoryWindow.FindFreeSlot(freeBag) : inventoryWindow.Bags[freeBag][slot];
-			if (freeSlot == null || freeSlot.InventoryItem != null)
+			freeSlot.InventoryItem = InventoryItem.Initialize(item);
+		}
+
+		/// <summary>
+		/// Adds item to the character inventory at the specific location.
+		/// </summary>
+		/// <param name="item">The item to add.</param>
+		/// <param name="location">Specific location to place item.</param>
+		public void AddItem (Item item, InventoryLocation location)
+		{
+			var freeSlot = inventoryWindow.FindSlot(location);
+
+			if (!freeSlot || freeSlot.InventoryItem != null)
 			{
-				Debug.LogError("SagaGUI: Can't add an item to the bag — no free slots available.");
+				Debug.LogError("SagaGUI: Can't add an item to the specific slot — it is not empty.");
 				return;
 			}
 
@@ -67,35 +76,54 @@ namespace SagaGUI
 		/// <param name="item">The item to remove.</param>
 		public void RemoveItem (Item item)
 		{
-			var itemToRemove = inventoryWindow.FindItem(item);
-			if (itemToRemove == null)
+			var location = inventoryWindow.LocateItem(item);
+			if (!location.Valid)
 			{
-				Debug.LogError("SagaGUI: Can't remove item form inventory — can't find this item in bags.");
+				Debug.LogError("SagaGUI: Can't remove item from inventory — can't find this item in bags.");
 				return;
 			}
 
-			inventoryWindow.RemoveItem(itemToRemove);
+			inventoryWindow.FreeSlot(inventoryWindow.FindSlot(location));
 		}
 
 		/// <summary>
 		/// Removes item from the character inventory.
 		/// </summary>
-		/// <param name="bag">ID of a bag, where item placed.</param>
-		/// <param name="slot">ID of a slot, where item placed.</param>
-		public void RemoveItem (int bag, int slot)
+		/// <param name="location">Location of item.</param>
+		public void RemoveItem (InventoryLocation location)
 		{
-			var itemToRemove = inventoryWindow.FindItem(bag, slot);
-			if (itemToRemove == null)
+			if (!location.Valid)
 			{
-				Debug.LogError("SagaGUI: Can't remove item form inventory — can't find this item in bags.");
+				Debug.LogError("SagaGUI: Can't remove item from inventory — specified inventory location is not valid.");
 				return;
 			}
 
-			inventoryWindow.RemoveItem(itemToRemove);
+			inventoryWindow.FreeSlot(inventoryWindow.FindSlot(location));
+		}
+
+		/// <summary>
+		/// Moves item to another slot.
+		/// Will swap items if moved to already occupied slot.
+		/// </summary>
+		/// <param name="item">Item to move.</param>
+		/// <param name="location">Target location.</param>
+		public void MoveItem (Item item, InventoryLocation location)
+		{
+			var initialItemLocation = inventoryWindow.LocateItem(item);
+			RemoveItem(item);
+
+			if (!inventoryWindow.FindSlot(location).Empty)
+			{
+				var itemInTargetSlot = inventoryWindow.FindSlot(location).InventoryItem.Item;
+				AddItem(itemInTargetSlot, initialItemLocation);
+				RemoveItem(location);
+			}
+
+			AddItem(item, location);
 		}
 
 		internal void FireUseItem (Item item) { OnUseItem(item); }
 		internal void FireDropItem (Item item) { OnDropItem(item); }
-		internal void FireMoveItem (Item item, int bag, int slot) { OnMoveItem(item, bag, slot); }
+		internal void FireMoveItem (Item item, InventoryLocation location) { OnMoveItem(item, location); }
 	}
 }

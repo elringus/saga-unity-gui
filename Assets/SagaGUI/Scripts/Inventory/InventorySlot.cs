@@ -14,6 +14,8 @@ namespace SagaGUI
 			}
 		}
 
+		public bool Empty { get { return InventoryItem == null; } }
+
 		private InventoryItem _inventoryItem;
 	}
 }

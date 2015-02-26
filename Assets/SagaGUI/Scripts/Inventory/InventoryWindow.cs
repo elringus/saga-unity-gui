@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SagaGUI
 {
 	public class InventoryWindow : MonoBehaviour
 	{
-		public Dictionary<int, List<InventorySlot>> Bags = new Dictionary<int, List<InventorySlot>>();
+		public Dictionary<InventoryLocation, InventorySlot> Slots = new Dictionary<InventoryLocation, InventorySlot>();
 
 		private Inventory inventory;
 		private Button closeButton;
@@ -15,10 +16,8 @@ namespace SagaGUI
 		{
 			for (int i = 0; i < 5; i++)
 			{
-				var slots = new List<InventorySlot>();
 				foreach (Transform slot in transform.Find("panel_bag" + (i + 1)))
-					slots.Add(slot.GetComponent<InventorySlot>());
-				Bags.Add(i, slots);
+					Slots.Add(new InventoryLocation(i, slot.GetSiblingIndex()), slot.GetComponent<InventorySlot>());
 			}
 
 			inventory = FindObjectOfType<Inventory>();
@@ -34,56 +33,31 @@ namespace SagaGUI
 			//		print("Bag " + bag.Key + ": Item " + (slot.InventoryItem != null ? slot.InventoryItem.Item.ID.ToString() : "empty"));
 		}
 
-		public int FindFreeBag ()
+		public InventorySlot GetEmptySlot ()
 		{
-			foreach (var bag in Bags)
-				if (bag.Value.Exists(s => s.InventoryItem == null)) return bag.Key;
-
-			// can't find free bag, return -1
-			return -1;
+			return Slots.OrderBy(s => s.Key.BagID)
+				.FirstOrDefault(s => s.Value.InventoryItem == null).Value;
 		}
 
-		public InventorySlot FindFreeSlot (int bag)
+		public InventorySlot FindSlot (InventoryLocation location)
 		{
-			foreach (var slot in Bags[bag])
-				if (slot.InventoryItem == null) return slot;
-
-			// can't find free slot in the bag, return null
-			return null;
+			return Slots[location];
 		}
 
-		public InventoryItem FindItem (Item item)
+		public InventoryLocation LocateSlot (InventorySlot slot)
 		{
-			InventoryItem foundItem = null;
-
-			foreach (var bag in Bags)
-			{
-				var slot = bag.Value.Find(s => s.InventoryItem && s.InventoryItem.Item.ID == item.ID);
-				if (!slot) continue;
-				foundItem = slot.InventoryItem;
-				break;
-			}
-
-			return foundItem;
+			return Slots.FirstOrDefault(s => s.Value == slot).Key;
 		}
 
-		public InventoryItem FindItem (int bag, int slot)
+		public void FreeSlot (InventorySlot slot)
 		{
-			return Bags[bag][slot].InventoryItem;
+			Destroy(slot.InventoryItem.gameObject);
+			slot.InventoryItem = null;
 		}
 
-		public void RemoveItem (InventoryItem inventoryItem)
+		public InventoryLocation LocateItem (Item item)
 		{
-			foreach (var bag in Bags)
-			{
-				var slot = bag.Value.Find(s => s.InventoryItem == inventoryItem);
-				if (slot != null)
-				{
-					slot.InventoryItem = null;
-					Destroy(inventoryItem.gameObject);
-					break;
-				}
-			}
+			return Slots.FirstOrDefault(s => s.Value.InventoryItem && s.Value.InventoryItem.Item == item).Key;
 		}
 	}
 }

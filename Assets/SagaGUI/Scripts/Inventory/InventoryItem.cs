@@ -17,9 +17,9 @@ namespace SagaGUI
 		private Inventory inventory;
 		private InventoryWindow inventoryWindow;
 		private Image image;
+		private Text text;
 		private Vector2 dragDelta;
 		private Camera canvasCamera;
-		private Color initColor; // temp
 
 		public static InventoryItem Initialize (Item item)
 		{
@@ -35,14 +35,14 @@ namespace SagaGUI
 			inventory = FindObjectOfType<Inventory>();
 			inventoryWindow = FindObjectOfType<InventoryWindow>();
 			image = GetComponent<Image>();
-			initColor = new Color(Random.value, Random.value, Random.value, 1); // temp
-			image.color = initColor;
+			text = GetComponentInChildren<Text>();
 			canvasCamera = FindObjectOfType<Canvas>().worldCamera;
 		}
 
 		private void Start ()
 		{
 			parentSet = transform.parent;
+			text.text = Item.ID.ToString();
 		}
 
 		public void OnBeginDrag (PointerEventData eventData)
@@ -69,7 +69,7 @@ namespace SagaGUI
 		{
 			transform.SetParent(parentSet, false);
 			transform.localPosition = Vector3.zero;
-			image.color = initColor;
+			image.color = Color.white;
 
 			// module returns null if invoked offscreen
 			if (!eventData.pointerCurrentRaycast.module) return;
@@ -86,9 +86,7 @@ namespace SagaGUI
 			if (!hoveredItems.Exists(i => i.gameObject.GetComponent<InventorySlot>())) return;
 			var targetSlot = hoveredItems.Find(i => i.gameObject.GetComponent<InventorySlot>()).gameObject.GetComponent<InventorySlot>();
 			if (targetSlot.InventoryItem == this) return;
-			int bagID = inventoryWindow.Bags.First(l => l.Value.Contains(targetSlot)).Key;
-			int slotID = inventoryWindow.Bags.First(l => l.Value.Contains(targetSlot)).Value.IndexOf(targetSlot);
-			inventory.FireMoveItem(Item, bagID, slotID);
+			inventory.FireMoveItem(Item, inventoryWindow.LocateSlot(targetSlot));
 		}
 
 		public void OnPointerEnter (PointerEventData eventData)
@@ -98,7 +96,7 @@ namespace SagaGUI
 
 		public void OnPointerExit (PointerEventData eventData)
 		{
-			image.color = initColor;
+			image.color = Color.white;
 		}
 
 		public void OnPointerDown (PointerEventData eventData)
