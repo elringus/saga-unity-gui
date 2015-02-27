@@ -11,6 +11,7 @@ namespace SagaGUI
 
 		private Inventory inventory;
 		private Button closeButton;
+		private Text spaceText;
 
 		private void Awake ()
 		{
@@ -22,15 +23,22 @@ namespace SagaGUI
 
 			inventory = FindObjectOfType<Inventory>();
 			closeButton = transform.Find("button_close").GetComponent<Button>();
+			spaceText = transform.Find("text_space").GetComponent<Text>();
 
 			closeButton.OnClick(inventory.Hide);
 		}
 
 		private void Start ()
 		{
-			//foreach (var bag in Bags)
-			//	foreach (var slot in bag.Value)
-			//		print("Bag " + bag.Key + ": Item " + (slot.InventoryItem != null ? slot.InventoryItem.Item.ID.ToString() : "empty"));
+			UpdateSpaceText();
+		}
+
+		public void UpdateSpaceText ()
+		{
+			int totalSlots = Slots.Count;
+			int filledSlots = Slots.Where(s => !s.Value.Empty).Count();
+
+			spaceText.text = string.Format("{0}/{1}", filledSlots, totalSlots);
 		}
 
 		public InventorySlot GetEmptySlot ()

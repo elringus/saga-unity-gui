@@ -10,19 +10,17 @@ namespace SagaGUI
 	public class Inventory : GUISet<Inventory>
 	{
 		/// <summary>
-		/// Player used an item.
-		/// T1 = item to use.
+		/// Player used an item. T1 = item used.
 		/// </summary>
 		public event UnityAction<Item> OnUseItem = delegate { };
+
 		/// <summary>
-		/// Player dragged item out of the bag to drop it.
-		/// T1 = item to drop.
+		/// Player dragged item out of the bag to drop it. T1 = item dropped.
 		/// </summary>
 		public event UnityAction<Item> OnDropItem = delegate { };
+
 		/// <summary>
-		/// Player dragged item to another slot.
-		/// T1 = item moved, 
-		/// T2 = target location.
+		/// Player dragged item to another slot. T1 = item moved, T2 = target location.
 		/// </summary>
 		public event UnityAction<Item, InventoryLocation> OnMoveItem = delegate { };
 
