@@ -47,12 +47,16 @@ namespace SagaGUI
 
 		public void OnBeginDrag (PointerEventData eventData)
 		{
+			if (!Input.GetMouseButton(0)) return;
+
 			dragDelta = transform.position - canvasCamera.ScreenToWorldPoint(eventData.position);
 			transform.SetParent(GameObject.Find("GUI").transform, false);
 		}
 
 		public void OnDrag (PointerEventData eventData)
 		{
+			if (!Input.GetMouseButton(0)) return;
+
 			image.color = FOCUS_COLOR;
 			transform.position = (Vector2)canvasCamera.ScreenToWorldPoint(eventData.position) + dragDelta;
 
@@ -67,6 +71,8 @@ namespace SagaGUI
 
 		public void OnEndDrag (PointerEventData eventData)
 		{
+			if (!Input.GetMouseButtonUp(0)) return;
+
 			transform.SetParent(parentSet, false);
 			transform.localPosition = Vector3.zero;
 			image.color = Color.white;

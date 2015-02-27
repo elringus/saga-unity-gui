@@ -22,11 +22,15 @@ public class DragArea : MonoBehaviour, IBeginDragHandler, IDragHandler
 
 	public void OnBeginDrag (PointerEventData eventData)
 	{
+		if (!Input.GetMouseButton(0)) return;
+
 		dragDelta = transform.position - canvasCamera.ScreenToWorldPoint(eventData.position);
 	}
 
 	public void OnDrag (PointerEventData eventData)
 	{
+		if (!Input.GetMouseButton(0)) return;
+
 		transform.parent.position = (Vector2)canvasCamera.ScreenToWorldPoint(eventData.position) + dragDelta;
 		transform.parent.localPosition = new Vector3(transform.parent.localPosition.x, transform.parent.localPosition.y, 0);
 	}
