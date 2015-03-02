@@ -99,8 +99,7 @@ namespace SagaGUI
 		{
 			get
 			{
-				if (_instance == null) 
-					_instance = Initialize();
+				if (_instance == null) Initialize();
 				return _instance;
 			}
 		}
@@ -128,6 +127,8 @@ namespace SagaGUI
 			set.gameObject.name = typeof(T).Name;
 			set.transform.SetParent(GUIManager.I.transform, false);
 			GUIManager.I.InitializedSets.Add(set);
+
+			_instance = set;
 
 			return set;
 		}
