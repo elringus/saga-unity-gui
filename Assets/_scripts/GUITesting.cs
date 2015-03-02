@@ -15,5 +15,7 @@ public class GUITesting : MonoBehaviour
 		Inventory.I.OnUseItem += (Item i) => { print("Used " + i.ID); Inventory.I.RemoveItem(i); };
 		Inventory.I.OnDropItem += (Item i) => Inventory.I.RemoveItem(i);
 		Inventory.I.OnMoveItem += (Item i, InventoryLocation l) => Inventory.I.MoveItem(i, l);
+
+		Tooltip.Initialize();
 	}
 }

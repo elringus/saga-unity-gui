@@ -18,13 +18,14 @@ namespace SagaGUI
 			set { if (value) Show(); else Hide(); }
 		}
 
+		protected CanvasGroup CanvasGroup;
+
 		private bool _visible = true;
-		private CanvasGroup canvasGroup;
 
 		#region MONOBEHAVIOUR_CALLBACKS
 		protected virtual void Awake ()
 		{
-			canvasGroup = GetComponent<CanvasGroup>();
+			CanvasGroup = GetComponent<CanvasGroup>();
 		}
 
 		protected virtual void Start ()
@@ -61,8 +62,8 @@ namespace SagaGUI
 		{
 			if (Visible) return;
 
-			canvasGroup.alpha = 1;
-			canvasGroup.interactable = true;
+			CanvasGroup.alpha = 1;
+			CanvasGroup.interactable = true;
 
 			_visible = true;
 		}
@@ -75,8 +76,8 @@ namespace SagaGUI
 		{
 			if (!Visible) return;
 
-			canvasGroup.alpha = 0;
-			canvasGroup.interactable = false;
+			CanvasGroup.alpha = 0;
+			CanvasGroup.interactable = false;
 
 			_visible = false;
 		}

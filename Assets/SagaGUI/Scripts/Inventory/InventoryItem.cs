@@ -98,11 +98,16 @@ namespace SagaGUI
 		public void OnPointerEnter (PointerEventData eventData)
 		{
 			image.color = HOVER_COLOR;
+
+			if (Tooltip.Initialized)
+				Tooltip.I.ShowTooltip(title: "Item with ID " + Item.ID);
 		}
 
 		public void OnPointerExit (PointerEventData eventData)
 		{
 			image.color = Color.white;
+
+			if (Tooltip.Initialized) Tooltip.I.Hide();
 		}
 
 		public void OnPointerDown (PointerEventData eventData)
