@@ -45,6 +45,11 @@ namespace SagaGUI
 			text.text = Item.ID.ToString();
 		}
 
+		private void OnDisable ()
+		{
+			if (Tooltip.Initialized) Tooltip.I.Hide();
+		}
+
 		public void OnBeginDrag (PointerEventData eventData)
 		{
 			if (!Input.GetMouseButton(0)) return;
