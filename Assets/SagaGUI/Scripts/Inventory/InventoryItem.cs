@@ -52,7 +52,7 @@ namespace SagaGUI
 
 		public void OnBeginDrag (PointerEventData eventData)
 		{
-			if (!Input.GetMouseButton(0)) return;
+			if (!inventory.Visible || !Input.GetMouseButton(0)) return;
 
 			dragDelta = transform.position - canvasCamera.ScreenToWorldPoint(eventData.position);
 			transform.SetParent(GameObject.Find("GUI").transform, false);
@@ -60,7 +60,7 @@ namespace SagaGUI
 
 		public void OnDrag (PointerEventData eventData)
 		{
-			if (!Input.GetMouseButton(0)) return;
+			if (!inventory.Visible || !Input.GetMouseButton(0)) return;
 
 			image.color = FOCUS_COLOR;
 			transform.position = (Vector2)canvasCamera.ScreenToWorldPoint(eventData.position) + dragDelta;
@@ -76,7 +76,7 @@ namespace SagaGUI
 
 		public void OnEndDrag (PointerEventData eventData)
 		{
-			if (!Input.GetMouseButtonUp(0)) return;
+			if (!inventory.Visible || !Input.GetMouseButtonUp(0)) return;
 
 			transform.SetParent(parentSet, false);
 			transform.localPosition = Vector3.zero;
@@ -102,6 +102,8 @@ namespace SagaGUI
 
 		public void OnPointerEnter (PointerEventData eventData)
 		{
+			if (!inventory.Visible) return;
+
 			image.color = HOVER_COLOR;
 
 			if (Tooltip.Initialized)
@@ -110,6 +112,8 @@ namespace SagaGUI
 
 		public void OnPointerExit (PointerEventData eventData)
 		{
+			if (!inventory.Visible) return;
+
 			image.color = Color.white;
 
 			if (Tooltip.Initialized) Tooltip.I.Hide();
@@ -117,11 +121,15 @@ namespace SagaGUI
 
 		public void OnPointerDown (PointerEventData eventData)
 		{
+			if (!inventory.Visible) return;
+
 			image.color = FOCUS_COLOR;
 		}
 
 		public void OnPointerClick (PointerEventData eventData)
 		{
+			if (!inventory.Visible) return;
+
 			if (Input.GetMouseButtonUp(1)) inventory.FireUseItem(Item);
 		}
 	}
