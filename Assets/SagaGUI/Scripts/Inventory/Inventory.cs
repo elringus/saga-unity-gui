@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using System.Linq;
 
 namespace SagaGUI
 {
@@ -37,8 +38,22 @@ namespace SagaGUI
 		/// Adds item to the character inventory at the first avaliable empty slot.
 		/// </summary>
 		/// <param name="item">The item to add.</param>
-		public void AddItem (Item item)
+		/// <param name="tryStack">Try to stack items if possible.</param>
+		public void AddItem (Item item, bool tryStack = true)
 		{
+			if (tryStack && item.MaxStack > 1)
+			{
+				foreach (var slot in inventoryWindow.Slots.Where(s => !s.Value.Empty))
+				{
+					var i = slot.Value.InventoryItem.Item;
+					if (i.ID == item.ID && (item.CurStack + i.CurStack) <= i.MaxStack)
+					{
+						i.CurStack += item.CurStack;
+						return;
+					}
+				}
+			}
+
 			var freeSlot = inventoryWindow.GetEmptySlot();
 
 			if (!freeSlot || freeSlot.InventoryItem != null)
@@ -101,7 +116,7 @@ namespace SagaGUI
 
 		/// <summary>
 		/// Moves item to another slot.
-		/// Will swap items if moved to already occupied slot.
+		/// Will swap items if moved to already occupied slot or stack them if possible.
 		/// </summary>
 		/// <param name="item">Item to move.</param>
 		/// <param name="location">Target location.</param>
@@ -113,6 +128,14 @@ namespace SagaGUI
 			if (!inventoryWindow.FindSlot(location).Empty)
 			{
 				var itemInTargetSlot = inventoryWindow.FindSlot(location).InventoryItem.Item;
+
+				if (item.ID == itemInTargetSlot.ID && itemInTargetSlot.MaxStack > 1 &&
+					(itemInTargetSlot.CurStack + item.CurStack) <= item.MaxStack)
+				{
+					itemInTargetSlot.CurStack += item.CurStack;
+					return;
+				}
+
 				AddItem(itemInTargetSlot, initialItemLocation);
 				RemoveItem(location);
 			}

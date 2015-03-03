@@ -12,7 +12,7 @@ namespace SagaGUI
 		/// <summary>
 		/// Is location valid (bag and slot IDs are set).
 		/// </summary>
-		public bool Valid { get { return BagID != -1 && SlotID != -1; } }
+		public bool Valid;
 
 		/// <summary>
 		/// Init location.
@@ -23,6 +23,8 @@ namespace SagaGUI
 		{
 			this.BagID = bagID;
 			this.SlotID = slotID;
+
+			Valid = BagID != -1 && SlotID != -1;
 		}
 	}
 }

@@ -17,7 +17,7 @@ namespace SagaGUI
 		private Inventory inventory;
 		private InventoryWindow inventoryWindow;
 		private Image image;
-		private Text text;
+		private Text stackText;
 		private Vector2 dragDelta;
 		private Camera canvasCamera;
 
@@ -35,14 +35,18 @@ namespace SagaGUI
 			inventory = FindObjectOfType<Inventory>();
 			inventoryWindow = FindObjectOfType<InventoryWindow>();
 			image = GetComponent<Image>();
-			text = GetComponentInChildren<Text>();
+			stackText = GetComponentInChildren<Text>();
 			canvasCamera = FindObjectOfType<Canvas>().worldCamera;
 		}
 
 		private void Start ()
 		{
 			parentSet = transform.parent;
-			text.text = Item.ID.ToString();
+		}
+
+		private void Update ()
+		{
+			stackText.text = Item.CurStack <= 1 ? string.Empty : Item.CurStack.ToString();
 		}
 
 		private void OnDisable ()

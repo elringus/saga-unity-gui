@@ -31,7 +31,7 @@ GameObject:
   - 114: {fileID: 11474530}
   - 114: {fileID: 11474532}
   m_Layer: 5
-  m_Name: Text
+  m_Name: text_stack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -89,7 +89,7 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 10
     m_MaxSize: 40
-    m_Alignment: 2
+    m_Alignment: 8
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
@@ -167,8 +167,8 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: .5, y: .5}
   m_AnchorMax: {x: .5, y: .5}
-  m_AnchoredPosition: {x: -3.0999999, y: 1.90734863e-05}
-  m_SizeDelta: {x: 33.7999992, y: 40}
+  m_AnchoredPosition: {x: -2.00000048, y: .600000024}
+  m_SizeDelta: {x: 36.0999985, y: 38.7999992}
   m_Pivot: {x: .5, y: .5}
 --- !u!1001 &100100000
 Prefab:
