@@ -58,7 +58,8 @@ namespace SagaGUI
 		{
 			if (!inventory.Visible || !Input.GetMouseButton(0)) return;
 
-			dragDelta = transform.position - canvasCamera.ScreenToWorldPoint(eventData.position);
+			dragDelta = (Vector2)transform.position - eventData.position;
+				//canvasCamera.ScreenToWorldPoint(eventData.position);
 			transform.SetParent(GameObject.Find("GUI").transform, false);
 		}
 
@@ -67,7 +68,8 @@ namespace SagaGUI
 			if (!inventory.Visible || !Input.GetMouseButton(0)) return;
 
 			image.color = FOCUS_COLOR;
-			transform.position = (Vector2)canvasCamera.ScreenToWorldPoint(eventData.position) + dragDelta;
+			transform.position = eventData.position + dragDelta;
+				//(Vector2)canvasCamera.ScreenToWorldPoint(eventData.position) + dragDelta;
 
 			// module returns null if invoked offscreen
 			if (!eventData.pointerCurrentRaycast.module) return;

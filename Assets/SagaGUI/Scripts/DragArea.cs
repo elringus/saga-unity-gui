@@ -24,14 +24,16 @@ public class DragArea : MonoBehaviour, IBeginDragHandler, IDragHandler
 	{
 		if (!Input.GetMouseButton(0)) return;
 
-		dragDelta = transform.position - canvasCamera.ScreenToWorldPoint(eventData.position);
+		dragDelta = (Vector2)transform.position - eventData.position;
+			//canvasCamera.ScreenToWorldPoint(eventData.position);
 	}
 
 	public void OnDrag (PointerEventData eventData)
 	{
 		if (!Input.GetMouseButton(0)) return;
 
-		transform.parent.position = (Vector2)canvasCamera.ScreenToWorldPoint(eventData.position) + dragDelta;
+		transform.parent.position = eventData.position + dragDelta;
+			//(Vector2)canvasCamera.ScreenToWorldPoint(eventData.position) + dragDelta;
 		transform.parent.localPosition = new Vector3(transform.parent.localPosition.x, transform.parent.localPosition.y, 0);
 	}
 }
