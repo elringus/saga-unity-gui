@@ -24,5 +24,12 @@ public class GUITesting : MonoBehaviour
 		Inventory.I.OnMoveItem += (Item i, InventoryLocation l) => Inventory.I.MoveItem(i, l);
 
 		Tooltip.Initialize();
+
+		FloatingBars.I.BindBar(GameObject.Find("Cube").transform);
+	}
+
+	private void Update ()
+	{
+		FloatingBars.I.SetHP(Mathf.Abs(Mathf.Sin(Time.time)));
 	}
 }
